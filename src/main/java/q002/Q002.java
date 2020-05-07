@@ -1,5 +1,9 @@
 package q002;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
+
 /**
  * Q002 並べ替える
  *
@@ -45,5 +49,24 @@ public class Q002 {
             "14,林",
             "9,清水"
     };
+
+
+    public static void main(String[] args) {
+        Map<Integer, String> mMap = new HashMap<Integer, String>();
+
+        for (String data: dataList){
+            Integer key = Integer.parseInt(data.split(",", 0)[0]);
+            String value = data.split(",", 0)[1];
+            mMap.put(key, value);
+        }
+
+        Object[] mapkey = mMap.keySet().toArray();
+        Arrays.sort(mapkey);
+
+        for (Integer nKey: mMap.keySet()){
+            System.out.println(nKey + "," + mMap.get(nKey));
+        }
+
+    }
 }
-// 完成までの時間: xx時間 xx分
+// 完成までの時間: 0時間 18分
