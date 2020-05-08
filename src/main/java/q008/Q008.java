@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -36,5 +38,52 @@ public class Q008 {
     private static Stream<File> listJavaFiles() throws IOException {
         return Files.walk(Paths.get(".")).map(Path::toFile).filter(f -> f.getName().endsWith(".java"));
     }
+
+    public static void main(String[] args) {
+        // Fileストリームを返す関数を呼んで、Fileリストを作る
+        ArrayList<File> fileList = new ArrayList<File>();
+        try {
+            listJavaFiles().forEach(fileList::add);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        // リストをforで回しながらチェック
+        fileList.stream().forEach(f ->{
+            Path path = f.toPath();
+            String name = path.getFileName().toString();
+            try {
+                List<String> lines = Files.readAllLines(path);
+                int index = 1;
+                for(String line: lines){
+                    if(line.matches(".+\".+\"$")){
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(name);
+                        builder.append("("+ index +"): ");
+                        builder.append(line);
+                        System.out.println(builder.toString());
+                    } else if(line.matches("^.+[\"'].+[\"'].*[,;{]$")){
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(name);
+                        builder.append("("+ index +"): ");
+                        builder.append(line);
+                        System.out.println(builder.toString());
+                    } else if(line.matches("^.+\".+\"[:;].+$")){
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(name);
+                        builder.append("("+ index +"): ");
+                        builder.append(line);
+                        System.out.println(builder.toString());
+                    }
+                    index++;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        });
+
+    }
 }
-// 完成までの時間: xx時間 xx分
+// 完成までの時間: 1時間 19分
