@@ -44,7 +44,7 @@ public class Q009 {
                     thread.interrupt();
                 }
                 break;
-            } else if(input.matches("^[1-9][0-9]*$")){
+            } else if(input.matches("^[0-9]+$")){
                 System.out.println("素因数分解スレッド起動");
                 num = new BigInteger(input);
                 runner = new PrimeFactorizationRunner(num);
@@ -67,4 +67,4 @@ public class Q009 {
         scanner.close();
     }
 }
-// 完成までの時間: 1時間 59分
+// 完成までの時間: 2時間 9分
