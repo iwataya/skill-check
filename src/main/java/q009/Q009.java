@@ -1,5 +1,11 @@
 package q009;
 
+import java.math.BigInteger;
+import java.util.Objects;
+import java.util.Scanner;
+
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Q009 重い処理を別スレッドで実行
  *
@@ -22,5 +28,43 @@ package q009;
 12345: 3,5,823
  */
 public class Q009 {
+
+    public static void main(String[] args) {
+        // 入力待ちループ
+        Scanner scanner = new Scanner(System.in);
+        BigInteger num = null;
+        Thread thread = null;
+        PrimeFactorizationRunner runner = null;
+        for(;;){
+            System.out.print("入力) ");
+            String input = scanner.nextLine();
+            if("exit".equals(input)){
+                System.out.println("プログラム終了");
+                if (Objects.nonNull(thread) && thread.isAlive()) {
+                    thread.interrupt();
+                }
+                break;
+            } else if(input.matches("^[1-9][0-9]*$")){
+                System.out.println("素因数分解スレッド起動");
+                num = new BigInteger(input);
+                runner = new PrimeFactorizationRunner(num);
+                thread = new Thread(runner);
+                thread.start();
+            } else if(StringUtils.isBlank(input)) {
+                if(Objects.nonNull(thread)){
+                    if(runner.isFinished()){
+                        System.out.print(num.toString() + ": ");
+                        System.out.println(StringUtils.join(runner.getResult().toArray(), ","));
+                    } else {
+                        System.out.println(num.toString() + ": 実行中");
+                    }
+                } else {
+                    System.out.println("素因数分解を行う数値を入力するか、exitを入力してください");
+                }
+            }
+        }
+
+        scanner.close();
+    }
 }
-// 完成までの時間: xx時間 xx分
+// 完成までの時間: 1時間 59分
